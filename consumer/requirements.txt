@@ -1,0 +1,7 @@
+flask
+kafka-python
+sqlalchemy
+psycopg2-binary
+python-dotenv
+mysql-connector-python
+pymysql
