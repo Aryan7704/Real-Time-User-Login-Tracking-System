@@ -8,7 +8,7 @@ import threading
 
 
 BATCH_SIZE = 5
-WAIT_DURATION = 20
+WAIT_DURATION = 50
 topics = ('north', 'south', 'east', 'west', 'central', 'northwest', 'southwest', 'other')
 
 
