@@ -5,6 +5,10 @@ from datetime import datetime
 import time
 import threading
 
+
+
+BATCH_SIZE = 5
+WAIT_DURATION = 20
 topics = ('north', 'south', 'east', 'west', 'central', 'northwest', 'southwest', 'other')
 
 
@@ -24,9 +28,8 @@ def start_consumer(topic_name):
     def flush_on_timeout():
         nonlocal data_list, last_received_time
         while True:
-            time.sleep(0.1)
             with lock:
-                if data_list and (time.time() - last_received_time >= 5):
+                if data_list and (time.time() - last_received_time >= WAIT_DURATION):
                     dbconnection(data_list)
                     data_list = []
 
@@ -37,10 +40,10 @@ def start_consumer(topic_name):
         message = json.loads(message.value.decode('utf-8'))
         message['date_time'] = datetime.strptime(message['date_time'], "%d@%m!%Y %H:%M:%S").strftime("%Y-%m-%d %H:%M:%S")
         message['topic_name'] = topic_name
-        print(message)
+        # print(message)
         with lock:
             data_list.append(message)
-            if len(data_list) % 5 == 0:
+            if len(data_list) % BATCH_SIZE == 0:
                 dbconnection(data_list)
                 data_list= []
 
